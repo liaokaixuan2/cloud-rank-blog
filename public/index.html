@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>云海评测 · CloudRank — 云服务器价格与性价比评测博客</title>
+<meta name="description" content="一个专注于云服务器 / VPS 价格与性价比评测的个人博客：价格速查表、深度评测、选购指南，帮你把钱花在刀刃上。">
+<style>
+:root{
+  --bg:#f6f8fb; --bg-soft:#eef2f7; --card:#ffffff; --text:#1a2333; --text-soft:#5a6a85;
+  --line:#e3e9f2; --accent:#2563eb; --accent-2:#7c3aed; --accent-soft:#e8efff;
+  --good:#16a34a; --warn:#d97706; --gold:#f59e0b; --shadow:0 1px 2px rgba(16,24,40,.05),0 8px 24px -12px rgba(16,24,40,.12);
+  --radius:14px; --mono:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+}
+[data-theme="dark"]{
+  --bg:#0d1220; --bg-soft:#111829; --card:#161e33; --text:#e8edf7; --text-soft:#94a3bd;
+  --line:#243049; --accent:#5b8dff; --accent-2:#a78bfa; --accent-soft:#1c2a4a;
+  --good:#4ade80; --warn:#fbbf24; --gold:#fbbf24; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -12px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background .3s,color .3s}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* ---------- 导航 ---------- */
+nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--text)}
+.logo svg{width:28px;height:28px}
+.logo .en{font-family:var(--mono);font-size:12px;color:var(--text-soft);font-weight:400;margin-left:2px}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{padding:7px 13px;border-radius:9px;color:var(--text-soft);font-size:14.5px;font-weight:500;transition:.2s}
+.nav-links a:hover{color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.theme-btn{margin-left:10px;border:1px solid var(--line);background:var(--card);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;display:grid;place-items:center;transition:.2s}
+.theme-btn:hover{transform:rotate(20deg);border-color:var(--accent)}
+@media(max-width:760px){.nav-links{display:none}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;overflow:hidden;padding:76px 0 66px;background:
+ radial-gradient(700px 340px at 12% -10%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%),
+ radial-gradient(700px 340px at 88% 0%,color-mix(in srgb,var(--accent-2) 15%,transparent),transparent 70%)}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;opacity:.4;mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%)}
+.hero-inner{position:relative;text-align:center;max-width:760px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:99px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:600;border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--good);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-size:clamp(30px,5vw,46px);line-height:1.25;margin:18px 0 14px;font-weight:800;letter-spacing:-.5px}
+h1 .grad{background:linear-gradient(92deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{color:var(--text-soft);font-size:17px;max-width:620px;margin:0 auto 28px}
+.hero-stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 26px;box-shadow:var(--shadow);min-width:130px}
+.stat b{display:block;font-size:24px;font-family:var(--mono);background:linear-gradient(92deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:12.5px;color:var(--text-soft)}
+
+/* ---------- 区块 ---------- */
+section{padding:58px 0}
+.sec-head{margin-bottom:30px}
+.sec-head .kicker{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--accent);font-family:var(--mono)}
+.sec-head h2{font-size:27px;margin-top:6px;font-weight:800}
+.sec-head p{color:var(--text-soft);margin-top:6px;font-size:15px}
+
+/* ---------- 文章卡片 ---------- */
+.posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:.25s;display:flex;flex-direction:column}
+.post:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.post .tag-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tag{font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.tag.green{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+.tag.orange{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.post h3{font-size:17.5px;line-height:1.5;margin-bottom:9px}
+.post p{color:var(--text-soft);font-size:14px;flex:1}
+.post .meta{display:flex;justify-content:space-between;margin-top:15px;font-size:12.5px;color:var(--text-soft)}
+.post .meta .read{color:var(--accent);font-weight:600}
+
+/* ---------- 价格表 ---------- */
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}
+.chip{padding:7px 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--text-soft);font-size:13.5px;font-weight:600;cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.table-box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:860px}
+thead th{position:sticky;top:0;background:var(--bg-soft);text-align:left;font-size:12.5px;color:var(--text-soft);padding:13px 14px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+thead th:hover{color:var(--accent)}
+thead th .arr{font-size:10px;opacity:.6}
+tbody td{padding:14px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:color-mix(in srgb,var(--accent) 4%,transparent)}
+.prov{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.prov .ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.prov small{display:block;font-weight:400;font-size:11.5px;color:var(--text-soft)}
+.cfg{font-family:var(--mono);font-size:12.5px;color:var(--text-soft);line-height:1.6}
+.price{font-family:var(--mono);font-weight:700;white-space:nowrap}
+.price small{color:var(--text-soft);font-weight:400}
+.mo{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.score{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-weight:700;white-space:nowrap}
+.score .bar{width:64px;height:6px;border-radius:99px;background:var(--bg-soft);overflow:hidden}
+.score .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.pill.cn{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.pill.gl{background:color-mix(in srgb,var(--accent-2) 14%,transparent);color:var(--accent-2)}
+.pill.free{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}
+.tbl-note{margin-top:13px;font-size:12.5px;color:var(--text-soft)}
+
+/* ---------- 榜单 ---------- */
+.rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
+.rank-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:.25s}
+.rank-card:hover{transform:translateY(-4px)}
+.rank-top{display:flex;align-items:center;gap:12px;margin-bottom:15px}
+.rank-no{font-family:var(--mono);font-weight:800;font-size:19px;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff;flex-shrink:0}
+.rank-top h3{font-size:17px}
+.rank-top small{color:var(--text-soft);font-size:12.5px}
+.dims{display:grid;gap:9px;margin-bottom:15px}
+.dim{display:grid;grid-template-columns:64px 1fr 40px;align-items:center;gap:10px;font-size:12.5px}
+.dim span{color:var(--text-soft)}
+.dim .track{height:7px;border-radius:99px;background:var(--bg-soft);overflow:hidden}
+.dim .track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.dim b{font-family:var(--mono);text-align:right;font-size:12px}
+.pc{display:grid;gap:6px;font-size:13px;margin-bottom:14px}
+.pc .yes{color:var(--good)}
+.pc .no{color:var(--warn)}
+.verdict{font-size:13px;background:var(--accent-soft);border-radius:10px;padding:10px 13px;color:var(--text)}
+
+/* ---------- 指南 ---------- */
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;counter-reset:step}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);position:relative;transition:.25s}
+.step:hover{transform:translateY(-4px)}
+.step::before{counter-increment:step;content:"0" counter(step);font-family:var(--mono);font-weight:800;font-size:30px;background:linear-gradient(92deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;opacity:.85}
+.step h3{font-size:16.5px;margin:8px 0 8px}
+.step p{font-size:13.5px;color:var(--text-soft)}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:780px;margin:0 auto}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:11px;box-shadow:var(--shadow)}
+details summary{font-weight:700;font-size:15px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details summary::after{content:"+";font-size:19px;color:var(--accent);font-family:var(--mono)}
+details[open] summary::after{content:"−"}
+details p{margin-top:10px;font-size:14px;color:var(--text-soft)}
+
+/* ---------- 页脚 ---------- */
+footer{border-top:1px solid var(--line);background:var(--bg-soft);padding:38px 0 30px;margin-top:20px}
+.foot-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.foot-inner p{font-size:13px;color:var(--text-soft);max-width:520px}
+.disclaimer{margin-top:22px;padding-top:16px;border-top:1px dashed var(--line);font-size:12px;color:var(--text-soft);text-align:center}
+
+/* 入场动画 */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="3" width="19" height="7" rx="2" stroke="url(#g1)" stroke-width="2"/><rect x="2.5" y="14" width="19" height="7" rx="2" stroke="url(#g1)" stroke-width="2"/><circle cx="7" cy="6.5" r="1.4" fill="url(#g1)"/><circle cx="7" cy="17.5" r="1.4" fill="url(#g1)"/><defs><linearGradient id="g1" x1="2" y1="3" x2="22" y2="21"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs></svg>
+      云海评测<span class="en">CloudRank</span>
+    </div>
+    <div class="nav-links">
+      <a href="#posts">最新评测</a>
+      <a href="#prices">价格速查</a>
+      <a href="#rank">性价比榜</a>
+      <a href="#guide">选购指南</a>
+      <a href="#faq">常见问题</a>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="切换主题">🌙</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <span class="badge"><span class="dot"></span>数据更新于 2026 年 10 月 · 每周核价</span>
+    <h1>把每一台<span class="grad">云服务器</span><br>都买在刀刃上</h1>
+    <p class="sub">这里是博主「凯子」的个人博客。我长期薅遍国内外云厂商的羊毛，实测各大 VPS 与云服务器的真实性能、网络质量与续费价格，只讲数据不带货。</p>
+    <div class="hero-stats">
+      <div class="stat"><b>16+</b><span>收录厂商</span></div>
+      <div class="stat"><b>120+</b><span>实测数据点</span></div>
+      <div class="stat"><b>¥8.3</b><span>最低靠谱月成本</span></div>
+      <div class="stat"><b>3 年</b><span>持续更新</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="posts">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">LATEST REVIEWS</div>
+      <h2>最新评测文章</h2>
+      <p>每一篇都基于真实付费机器与长周期实测，测评机不退不卖，跑满再写。</p>
+    </div>
+    <div class="posts">
+      <article class="post reveal">
+        <div class="tag-row"><span class="tag">大厂活动</span><span class="tag green">已实测</span></div>
+        <h3>2026 年底云服务器薅羊毛攻略：99 元一年的大厂轻量到底怎么选</h3>
+        <p>阿里云、腾讯云、华为云三家轻量应用服务器的年末活动价横向对比：首年价格、续费陷阱、带宽虚标情况，以及哪家的控制台最适合新手。</p>
+        <div class="meta"><span>2026-10-24 · 8 分钟</span><span class="read">阅读全文 →</span></div>
+      </article>
+      <article class="post reveal">
+        <div class="tag-row"><span class="tag">海外 VPS</span><span class="tag orange">长测中</span></div>
+        <h3>Hetzner CX22 深度评测：每月 30 块的欧洲神机，值得上车吗</h3>
+        <p>€4.29/月拿到 2 核 4G，跑分直接碾压同价大厂。但国内访问延迟 180ms 起步，这篇讲清楚它适合什么业务、不适合什么业务。</p>
+        <div class="meta"><span>2026-10-17 · 12 分钟</span><span class="read">阅读全文 →</span></div>
+      </article>
+      <article class="post reveal">
+        <div class="tag-row"><span class="tag">低价年付</span><span class="tag green">已实测</span></div>
+        <h3>RackNerd 年付 $11.99 的 VPS 能干什么：连续跑满 30 天后的真实体验</h3>
+        <p>超售小鸡是玩具还是生产力？我用它挂了探针、博客和一条隧道，记录 CPU 抢占、硬盘 IO 和掉线率，给出「什么场景别买」的清单。</p>
+        <div class="meta"><span>2026-10-09 · 10 分钟</span><span class="read">阅读全文 →</span></div>
+      </article>
+      <article class="post reveal">
+        <div class="tag-row"><span class="tag">建站知识</span></div>
+        <h3>国内备案 vs 海外免备案：建站选服务器时最容易忽略的隐藏成本</h3>
+        <p>备案不只是交材料：域名实名、内容审查、迁移成本、备案号维护，以及免备案方案在速度与合规上的真实代价。</p>
+        <div class="meta"><span>2026-09-28 · 9 分钟</span><span class="read">阅读全文 →</span></div>
+      </article>
+      <article class="post reveal">
+        <div class="tag-row"><span class="tag">白嫖指南</span><span class="tag orange">时效性</span></div>
+        <h3>Oracle 云永久免费层 2026 现状：ARM 4 核 24G 还香吗</h3>
+        <p>免费层回收机制变严之后，开机难、被回收的案例变多。这篇更新最新的开区技巧与防回收姿势，以及值不值得继续折腾。</p>
+        <div class="meta"><span>2026-09-15 · 7 分钟</span><span class="read">阅读全文 →</span></div>
+      </article>
+      <article class="post reveal">
+        <div class="tag-row"><span class="tag">建站知识</span></div>
+        <h3>带宽、流量、月付、年付：一篇看懂 VPS 报价表里的所有文字游戏</h3>
+        <p>「100M 带宽」可能是共享的，「3TB 流量」可能只算出站，「$4.99/月」可能要年付才有。教你看穿报价表的每一个坑。</p>
+        <div class="meta"><span>2026-09-02 · 11 分钟</span><span class="read">阅读全文 →</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="prices" style="background:var(--bg-soft)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">PRICE TABLE</div>
+      <h2>价格速查表</h2>
+      <p>收录国内外主流云服务器 / VPS 的入门参考价。点击表头可排序，点击标签可筛选。</p>
+    </div>
+    <div class="filters reveal">
+      <button class="chip on" data-f="all">全部（14）</button>
+      <button class="chip" data-f="cn">国内厂商</button>
+      <button class="chip" data-f="gl">海外厂商</button>
+      <button class="chip" data-f="free">免费额度</button>
+      <button class="chip" data-f="cheap">年付低价机</button>
+    </div>
+    <div class="table-box reveal">
+      <table id="priceTable">
+        <thead>
+          <tr>
+            <th data-sort="name">服务商 <span class="arr">⇅</span></th>
+            <th>参考套餐</th>
+            <th>参考价格 <span class="arr">⇅</span></th>
+            <th data-sort="mo">折合月付 <span class="arr">⇅</span></th>
+            <th data-sort="score">性价比 <span class="arr">⇅</span></th>
+            <th>地区</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-f="cn">
+            <td><div class="prov"><span class="ico" style="background:#ff6a00">阿</span><span>阿里云<small>轻量应用服务器</small></span></div></td>
+            <td><div class="cfg">2核2G · 3M带宽<br>50G SSD · 1TB流量/月</div></td>
+            <td><div class="price">¥99<small>/年（活动价）</small></div></td>
+            <td><div class="mo">≈ ¥8.3/月</div></td>
+            <td><div class="score">8.5<span class="bar"><i style="width:85%"></i></span></div></td>
+            <td><span class="pill cn">国内 · 需备案</span></td>
+          </tr>
+          <tr data-f="cn">
+            <td><div class="prov"><span class="ico" style="background:#0052d9">腾</span><span>腾讯云<small>轻量应用服务器</small></span></div></td>
+            <td><div class="cfg">2核2G · 4M带宽<br>60G SSD · 1TB流量/月</div></td>
+            <td><div class="price">¥112<small>/年（活动价）</small></div></td>
+            <td><div class="mo">≈ ¥9.3/月</div></td>
+            <td><div class="score">8.8<span class="bar"><i style="width:88%"></i></span></div></td>
+            <td><span class="pill cn">国内 · 需备案</span></td>
+          </tr>
+          <tr data-f="cn">
+            <td><div class="prov"><span class="ico" style="background:#c7000b">华</span><span>华为云<small>耀云服务器</small></span></div></td>
+            <td><div class="cfg">2核2G · 2M带宽<br>50G SSD</div></td>
+            <td><div class="price">¥199<small>/年（活动价）</small></div></td>
+            <td><div class="mo">≈ ¥16.6/月</div></td>
+            <td><div class="score">8.0<span class="bar"><i style="width:80%"></i></span></div></td>
+            <td><span class="pill cn">国内 · 需备案</span></td>
+          </tr>
+          <tr data-f="gl">
+            <td><div class="prov"><span class="ico" style="background:#5a2d82">AW</span><span>AWS Lightsail<small>亚马逊入门款</small></span></div></td>
+            <td><div class="cfg">2核1G · 4TB流量<br>40G SSD</div></td>
+            <td><div class="price">$10<small>/月</small></div></td>
+            <td><div class="mo">≈ ¥71/月</div></td>
+            <td><div class="score">7.5<span class="bar"><i style="width:75%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 多区域</span></td>
+          </tr>
+          <tr data-f="gl">
+            <td><div class="prov"><span class="ico" style="background:#3a46bf">Vu</span><span>Vultr<small>High Frequency</small></span></div></td>
+            <td><div class="cfg">1核1G · 1TB流量<br>25G NVMe</div></td>
+            <td><div class="price">$6<small>/月</small></div></td>
+            <td><div class="mo">≈ ¥43/月</div></td>
+            <td><div class="score">8.0<span class="bar"><i style="width:80%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 32 区域</span></td>
+          </tr>
+          <tr data-f="gl">
+            <td><div class="prov"><span class="ico" style="background:#0080ff">DO</span><span>DigitalOcean<small>Basic Droplet</small></span></div></td>
+            <td><div class="cfg">1核1G · 1TB流量<br>25G SSD</div></td>
+            <td><div class="price">$6<small>/月</small></div></td>
+            <td><div class="mo">≈ ¥43/月</div></td>
+            <td><div class="score">7.8<span class="bar"><i style="width:78%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 文档最好</span></td>
+          </tr>
+          <tr data-f="gl">
+            <td><div class="prov"><span class="ico" style="background:#00a2c7">Li</span><span>Akamai / Linode<small>Nanode</small></span></div></td>
+            <td><div class="cfg">1核1G · 1TB流量<br>25G SSD</div></td>
+            <td><div class="price">$5<small>/月</small></div></td>
+            <td><div class="mo">≈ ¥36/月</div></td>
+            <td><div class="score">7.8<span class="bar"><i style="width:78%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 老牌稳定</span></td>
+          </tr>
+          <tr data-f="gl">
+            <td><div class="prov"><span class="ico" style="background:#d50911">He</span><span>Hetzner<small>云vCPU CX22</small></span></div></td>
+            <td><div class="cfg">2核4G · 20TB流量<br>40G NVMe</div></td>
+            <td><div class="price">€4.29<small>/月（含 IPv4）</small></div></td>
+            <td><div class="mo">≈ ¥34/月</div></td>
+            <td><div class="score">9.5<span class="bar"><i style="width:95%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 欧洲机房</span></td>
+          </tr>
+          <tr data-f="gl">
+            <td><div class="prov"><span class="ico" style="background:#003d91">OV</span><span>OVHcloud<small>VPS Starter</small></span></div></td>
+            <td><div class="cfg">2核2G · 2TB流量<br>40G NVMe</div></td>
+            <td><div class="price">$6<small>/月</small></div></td>
+            <td><div class="mo">≈ ¥43/月</div></td>
+            <td><div class="score">8.2<span class="bar"><i style="width:82%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 欧洲机房</span></td>
+          </tr>
+          <tr data-f="gl cheap">
+            <td><div class="prov"><span class="ico" style="background:#1e90ff">RN</span><span>RackNerd<small>年付促销款</small></span></div></td>
+            <td><div class="cfg">1核1G · 1TB流量<br>17G SSD</div></td>
+            <td><div class="price">$11.99<small>/年（促销）</small></div></td>
+            <td><div class="mo">≈ ¥7.2/月</div></td>
+            <td><div class="score">9.0<span class="bar"><i style="width:90%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 美国机房</span></td>
+          </tr>
+          <tr data-f="gl cheap">
+            <td><div class="prov"><span class="ico" style="background:#166534">搬</span><span>搬瓦工 BWH<small>CN2 GIA-E</small></span></div></td>
+            <td><div class="cfg">1核1G · 1TB流量<br>20G SSD</div></td>
+            <td><div class="price">$49.99<small>/年</small></div></td>
+            <td><div class="mo">≈ ¥30/月</div></td>
+            <td><div class="score">7.5<span class="bar"><i style="width:75%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 优质线路</span></td>
+          </tr>
+          <tr data-f="gl cheap">
+            <td><div class="prov"><span class="ico" style="background:#0ea5e9">CC</span><span>CloudCone<small>限时大促款</small></span></div></td>
+            <td><div class="cfg">2核1.5G · 2TB流量<br>40G SSD</div></td>
+            <td><div class="price">$16.7<small>/年（大促）</small></div></td>
+            <td><div class="mo">≈ ¥10/月</div></td>
+            <td><div class="score">8.5<span class="bar"><i style="width:85%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 美国机房</span></td>
+          </tr>
+          <tr data-f="gl">
+            <td><div class="prov"><span class="ico" style="background:#6d28d9">DM</span><span>DMIT<small>PVM.Lite</small></span></div></td>
+            <td><div class="cfg">1核1G · 1TB流量<br>20G SSD</div></td>
+            <td><div class="price">$9.9<small>/月</small></div></td>
+            <td><div class="mo">≈ ¥71/月</div></td>
+            <td><div class="score">8.0<span class="bar"><i style="width:80%"></i></span></div></td>
+            <td><span class="pill gl">海外 · 三网优化</span></td>
+          </tr>
+          <tr data-f="gl free">
+            <td><div class="prov"><span class="ico" style="background:#e11d48">Or</span><span>Oracle Cloud<small>Always Free</small></span></div></td>
+            <td><div class="cfg">ARM 4核24G<br>200G 块存储</div></td>
+            <td><div class="price" style="color:var(--good)">免费<small>（永久额度）</small></div></td>
+            <td><div class="mo">¥0/月</div></td>
+            <td><div class="score">9.8<span class="bar"><i style="width:98%"></i></span></div></td>
+            <td><span class="pill free">免费 · 开机靠手速</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note reveal">* 价格为 2026 年 10 月的公开参考价，厂商促销随时变动，下单前请以官网为准。「折合月付」按 1 USD ≈ ¥7.15、1 EUR ≈ ¥7.9 估算。活动价首年便宜、续费恢复原价，是行业惯例。</p>
+  </div>
+</section>
+
+<section id="rank">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">VALUE RANKING</div>
+      <h2>性价比排行榜 TOP 5</h2>
+      <p>按「每一块钱能买到的真实体验」打分：性能 35%、网络 25%、稳定性 20%、售后 10%、价格透明度 10%。</p>
+    </div>
+    <div class="rank-grid">
+      <div class="rank-card reveal">
+        <div class="rank-top"><span class="rank-no" style="background:linear-gradient(135deg,#f59e0b,#f97316)">🥇</span><div><h3>Oracle Cloud 免费层</h3><small>¥0 / 月 · 日本/韩国/新加坡区</small></div></div>
+        <div class="dims">
+          <div class="dim"><span>性能</span><span class="track"><i style="width:92%"></i></span><b>9.2</b></div>
+          <div class="dim"><span>网络</span><span class="track"><i style="width:88%"></i></span><b>8.8</b></div>
+          <div class="dim"><span>稳定性</span><span class="track"><i style="width:80%"></i></span><b>8.0</b></div>
+          <div class="dim"><span>价格</span><span class="track"><i style="width:100%"></i></span><b>10</b></div>
+        </div>
+        <div class="pc">
+          <div class="yes">✓ ARM 4 核 24G 内存，免费额度无敌</div>
+          <div class="no">✗ 开机要抢，闲置可能被回收</div>
+        </div>
+        <div class="verdict">白嫖党的终极答案。能开出来就是赚到，但别把唯一的生产业务放上面。</div>
+      </div>
+      <div class="rank-card reveal">
+        <div class="rank-top"><span class="rank-no" style="background:linear-gradient(135deg,#d50911,#f43f5e)">🥈</span><div><h3>Hetzner CX22</h3><small>≈¥34 / 月 · 德国 / 芬兰</small></div></div>
+        <div class="dims">
+          <div class="dim"><span>性能</span><span class="track"><i style="width:95%"></i></span><b>9.5</b></div>
+          <div class="dim"><span>网络</span><span class="track"><i style="width:70%"></i></span><b>7.0</b></div>
+          <div class="dim"><span>稳定性</span><span class="track"><i style="width:94%"></i></span><b>9.4</b></div>
+          <div class="dim"><span>价格</span><span class="track"><i style="width:96%"></i></span><b>9.6</b></div>
+        </div>
+        <div class="pc">
+          <div class="yes">✓ 同价位性能天花板，20TB 流量管够</div>
+          <div class="no">✗ 国内延迟 180ms+，无亚时机房</div>
+        </div>
+        <div class="verdict">面向欧洲用户或纯后端业务的最优解，跑应用、数据库、爬虫都物超所值。</div>
+      </div>
+      <div class="rank-card reveal">
+        <div class="rank-top"><span class="rank-no" style="background:linear-gradient(135deg,#2563eb,#7c3aed)">🥉</span><div><h3>腾讯云轻量 2C2G</h3><small>¥112 / 年 · 国内多区域</small></div></div>
+        <div class="dims">
+          <div class="dim"><span>性能</span><span class="track"><i style="width:80%"></i></span><b>8.0</b></div>
+          <div class="dim"><span>网络</span><span class="track"><i style="width:90%"></i></span><b>9.0</b></div>
+          <div class="dim"><span>稳定性</span><span class="track"><i style="width:88%"></i></span><b>8.8</b></div>
+          <div class="dim"><span>价格</span><span class="track"><i style="width:85%"></i></span><b>8.5</b></div>
+        </div>
+        <div class="pc">
+          <div class="yes">✓ 新手控制台最友好，4M 带宽够用</div>
+          <div class="no">✗ 续费恢复原价 ¥624/年，注意留后路</div>
+        </div>
+        <div class="verdict">国内建站新手的第一台服务器，活动价闭眼入，但到期前记得规划续费。</div>
+      </div>
+      <div class="rank-card reveal">
+        <div class="rank-top"><span class="rank-no" style="background:linear-gradient(135deg,#1e90ff,#38bdf8)">4</span><div><h3>RackNerd 年付机</h3><small>≈¥7.2 / 月 · 美国圣何塞等</small></div></div>
+        <div class="dims">
+          <div class="dim"><span>性能</span><span class="track"><i style="width:65%"></i></span><b>6.5</b></div>
+          <div class="dim"><span>网络</span><span class="track"><i style="width:72%"></i></span><b>7.2</b></div>
+          <div class="dim"><span>稳定性</span><span class="track"><i style="width:82%"></i></span><b>8.2</b></div>
+          <div class="dim"><span>价格</span><span class="track"><i style="width:97%"></i></span><b>9.7</b></div>
+        </div>
+        <div class="pc">
+          <div class="yes">✓ 一杯奶茶钱跑一年，适合挂探针/玩具</div>
+          <div class="no">✗ 超售明显，别放重要业务</div>
+        </div>
+        <div class="verdict">预算极低时的最优玩具机。跑个博客、监控、机器人绰绰有余，重要数据请备份。</div>
+      </div>
+      <div class="rank-card reveal">
+        <div class="rank-top"><span class="rank-no" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">5</span><div><h3>Vultr High Frequency</h3><small>$6 / 月 · 全球 32 区域</small></div></div>
+        <div class="dims">
+          <div class="dim"><span>性能</span><span class="track"><i style="width:85%"></i></span><b>8.5</b></div>
+          <div class="dim"><span>网络</span><span class="track"><i style="width:80%"></i></span><b>8.0</b></div>
+          <div class="dim"><span>稳定性</span><span class="track"><i style="width:86%"></i></span><b>8.6</b></div>
+          <div class="dim"><span>价格</span><span class="track"><i style="width:72%"></i></span><b>7.2</b></div>
+        </div>
+        <div class="pc">
+          <div class="yes">✓ 区域多、按小时计费，随开随删</div>
+          <div class="no">✗ 同配置比大厂年付机贵数倍</div>
+        </div>
+        <div class="verdict">按小时计费 + 区域全，适合短周期项目和需要全球节点的场景。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="guide" style="background:var(--bg-soft)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">BUYING GUIDE</div>
+      <h2>五步选购指南</h2>
+      <p>买服务器不是越贵越好，按这个顺序想一遍，能避开 90% 的坑。</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h3>先定用途，再谈配置</h3><p>静态博客 1 核 1G 足够；WordPress + 数据库建议 2 核 2G 起步；跑数据库、编译、AI 推理则优先内存和磁盘 IO，而不是核数。</p></div>
+      <div class="step reveal"><h3>用户在哪，机器就在哪</h3><p>面向国内用户选国内大厂（需备案），面向海外选 Hetzner / DO / Vultr。中美之间每 100ms 延迟都在流失访客。</p></div>
+      <div class="step reveal"><h3>看清带宽与流量的真实含义</h3><p>「100M 带宽」要看是独享还是共享；「2TB 流量」通常只算出站。轻量机的固定小带宽 + 大流量，比按量计费更适合建站。</p></div>
+      <div class="step reveal"><h3>警惕「首年价」的文字游戏</h3><p>大厂活动价第一年 ¥99，续费可能 ¥600+。买之前查清楚「续费同价」条款，或者做好到期换厂商 / 换账号的准备。</p></div>
+      <div class="step reveal"><h3>查退款政策与工单口碑</h3><p>海外厂商优先选支持 7 天无理由退款的（DO、Vultr 等）。小厂先搜「厂商名 + 跑路 / 卷款」，年付金额超过心理承受线就改月付试水。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal" style="text-align:center">
+      <div class="kicker">FAQ</div>
+      <h2>常见问题</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary>评测数据是怎么来的？有恰饭吗？</summary><p>所有评测机均为博主自费购买并连续运行至少 30 天，性能数据来自 UnixBench、fio、iperf3 与长期探针监控。本站无联盟返佣链接，排序不受任何厂商影响。</p></details>
+      <details class="reveal"><summary>个人博客到底需要多大的服务器？</summary><p>纯静态站 1 核 512M 都够（甚至可以直接用免费的静态托管）；带数据库的动态博客 1 核 1G 起步；日均 PV 5000 以下的站点，2 核 2G 基本就是天花板配置。</p></details>
+      <details class="reveal"><summary>年付和月付到底怎么选？</summary><p>大厂活动机（阿里云、腾讯云等）年付价格优势巨大，直接年付；小厂与超售商家首台机器建议月付试水 1-2 个月，确认稳定后再切年付锁价。</p></details>
+      <details class="reveal"><summary>为什么同一个厂商不同人评价差别那么大？</summary><p>机房区域、购买渠道、是否超售时段、甚至 IP 段都会显著影响体验。看评测先看「测的是哪个区域哪个套餐」，结论才有参考价值。</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <div>
+        <div class="logo" style="margin-bottom:10px">云海评测<span class="en">CloudRank</span></div>
+        <p>一个记录云服务器真实价格与性价比的个人博客。博客由博主「凯子」维护，数据每周人工复核一次。</p>
+      </div>
+      <div style="font-size:13px;color:var(--text-soft)">
+        <div style="font-weight:700;color:var(--text);margin-bottom:6px">友情链接位（虚位以待）</div>
+        <div>技术博客 · 独立开发者 · 主机论坛</div>
+      </div>
+    </div>
+    <div class="disclaimer">免责声明：本站所有价格与配置信息整理自各厂商公开页面（更新于 2026-10），仅供参考，实际以厂商官网为准；不构成任何消费建议。© 2026 云海评测 · Powered by Render</div>
+  </div>
+</footer>
+
+<script>
+/* 主题切换 */
+const btn=document.getElementById('themeBtn');
+const saved=localStorage.getItem('cr-theme');
+if(saved){document.documentElement.dataset.theme=saved}
+btn.textContent=document.documentElement.dataset.theme==='dark'?'☀️':'🌙';
+btn.onclick=()=>{
+  const cur=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=cur;localStorage.setItem('cr-theme',cur);
+  btn.textContent=cur==='dark'?'☀️':'🌙';
+};
+
+/* 价格表筛选 */
+const chips=document.querySelectorAll('.chip');
+chips.forEach(c=>c.onclick=()=>{
+  chips.forEach(x=>x.classList.remove('on'));c.classList.add('on');
+  const f=c.dataset.f;
+  document.querySelectorAll('#priceTable tbody tr').forEach(tr=>{
+    tr.style.display=(f==='all'||tr.dataset.f.includes(f))?'':'none';
+  });
+});
+
+/* 价格表排序 */
+document.querySelectorAll('#priceTable thead th[data-sort]').forEach(th=>{
+  th.onclick=()=>{
+    const key=th.dataset.sort,tbody=document.querySelector('#priceTable tbody');
+    const asc=th.dataset.dir!=='asc';th.dataset.dir=asc?'asc':'desc';
+    const rows=[...tbody.querySelectorAll('tr')];
+    rows.sort((a,b)=>{
+      let va,vb;
+      if(key==='mo'){va=parseFloat(a.children[3].textContent.replace(/[^\d.]/g,''));vb=parseFloat(b.children[3].textContent.replace(/[^\d.]/g,''))}
+      else if(key==='score'){va=parseFloat(a.children[4].textContent);vb=parseFloat(b.children[4].textContent)}
+      else{va=a.children[0].textContent.trim();vb=b.children[0].textContent.trim();return asc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh')}
+      return asc?va-vb:vb-va;
+    });
+    rows.forEach(r=>tbody.appendChild(r));
+  };
+});
+
+/* 入场动画 */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
