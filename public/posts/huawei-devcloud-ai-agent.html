@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华为云 AI Agent 实测：一个入口白嫖 DeepSeek、GLM、Kimi、盘古，邀请还能拿积分 — 张盈评测</title>
+<meta name="description" content="华为云 AI Agent（DevCloud）真实体验：一个对话入口聚合 DeepSeek-V4.1、GLM-5.3/5.2、Kimi-K3、OpenPangu 盘古等模型，最低 0.08x 积分倍率；附每日签到、学生认证与邀请返积分玩法，邀请与被邀请双方的好处一次说清。">
+<style>
+:root{
+  --bg:#f6f8fb; --card:#ffffff; --text:#1a2333; --text-soft:#5a6a85;
+  --line:#e3e9f2; --accent:#2563eb; --accent-2:#7c3aed; --accent-soft:#e8efff;
+  --good:#16a34a; --warn:#d97706; --shadow:0 1px 2px rgba(16,24,40,.05),0 8px 24px -12px rgba(16,24,40,.12);
+  --radius:14px; --mono:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+}
+[data-theme="dark"]{
+  --bg:#0d1220; --bg-soft:#111829; --card:#161e33; --text:#e8edf7; --text-soft:#94a3bd;
+  --line:#243049; --accent:#5b8dff; --accent-2:#a78bfa; --accent-soft:#1c2a4a;
+  --good:#4ade80; --warn:#fbbf24; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -12px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;transition:background .3s,color .3s}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--text)}
+.logo .en{font-family:var(--mono);font-size:12px;color:var(--text-soft);font-weight:400}
+.theme-btn{border:1px solid var(--line);background:var(--card);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px}
+header.article-head{padding:52px 0 10px}
+.kicker{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--accent);font-family:var(--mono)}
+h1{font-size:clamp(24px,4vw,34px);line-height:1.4;margin:12px 0 14px;font-weight:800}
+.meta-row{display:flex;gap:14px;flex-wrap:wrap;color:var(--text-soft);font-size:13.5px;align-items:center}
+.meta-row .tag{font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.meta-row .tag.green{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+.declare{margin:26px 0 8px;background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:var(--radius);padding:14px 18px;font-size:14px}
+.declare b{color:var(--accent)}
+article{padding:12px 0 40px}
+article h2{font-size:22px;margin:38px 0 14px;font-weight:800;padding-left:12px;border-left:4px solid var(--accent)}
+article h3{font-size:17px;margin:26px 0 10px;font-weight:700}
+article p{margin:12px 0;font-size:15.5px;color:var(--text)}
+article p.dim{color:var(--text-soft);font-size:14px}
+article ul,article ol{margin:12px 0 12px 22px;font-size:15px}
+article li{margin:6px 0}
+article .yes{color:var(--good)}
+article .no{color:var(--warn)}
+pre{background:#0f172a;color:#dbe4f3;border-radius:12px;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.7;margin:14px 0;word-break:break-all;white-space:pre-wrap}
+[data-theme="dark"] pre{background:#0a0f1d}
+code{font-family:var(--mono);font-size:.92em;background:color-mix(in srgb,var(--accent) 9%,transparent);padding:2px 6px;border-radius:6px}
+pre code{background:none;padding:0}
+figure{margin:22px 0;text-align:center}
+figure img{max-width:100%;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow)}
+figcaption{margin-top:10px;font-size:13px;color:var(--text-soft)}
+table{width:100%;border-collapse:collapse;margin:16px 0;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);font-size:14.5px}
+thead th{background:var(--accent-soft);color:var(--accent);text-align:left;padding:11px 14px;font-size:13.5px}
+tbody td{padding:11px 14px;border-top:1px solid var(--line)}
+tbody td:first-child{font-weight:700;white-space:nowrap}
+.score-pill{display:inline-block;font-family:var(--mono);font-weight:700;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:2px 10px}
+.concl{margin-top:34px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px}
+.concl h3{margin-top:0}
+.cta{margin:20px 0;padding:18px 20px;border:2px dashed color-mix(in srgb,var(--accent) 45%,transparent);border-radius:var(--radius);background:color-mix(in srgb,var(--accent) 6%,transparent);text-align:center}
+.cta .btn{display:inline-block;margin-top:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:700;font-size:15px;padding:11px 26px;border-radius:99px;box-shadow:var(--shadow)}
+.cta .btn:hover{text-decoration:none;filter:brightness(1.08)}
+footer{border-top:1px solid var(--line);background:var(--bg-soft);padding:26px 0;margin-top:30px}
+footer p{font-size:12.5px;color:var(--text-soft);text-align:center}
+.back-home{display:inline-block;margin-top:34px;font-weight:700}
+@media(max-width:600px){h1{font-size:22px} article h2{font-size:19px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="/index.html" style="text-decoration:none">张盈评测<span class="en">ZY Review</span></a>
+    <button class="theme-btn" id="themeBtn" title="切换主题">🌙</button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="article-head">
+    <div class="kicker">HANDS-ON REVIEW · 实测</div>
+    <h1>华为云 AI Agent 实测：一个入口白嫖 DeepSeek、GLM、Kimi、盘古，邀请还能拿积分</h1>
+    <div class="meta-row">
+      <span class="tag">AI 工具</span><span class="tag green">白嫖指南</span><span class="tag">邀请福利</span>
+      <span>作者：凯子 · 2026-10-31 · 全文约 1800 字</span>
+    </div>
+    <div class="declare">
+      <b>利益相关说明：</b>文中的华为云 AI Agent 入口链接是本人的<b>邀请链接</b>。通过它注册，我这边会获得平台积分奖励（下文有明细），<b>你那边的使用权益与自主注册完全一致</b>，不是从你身上扣的。观点独立客观，缺点照实说。
+    </div>
+  </header>
+
+  <article>
+    <p>这两年大模型的订阅费是真不便宜：这家 20 刀、那家 140 块，想同时用上 DeepSeek、智谱 GLM、Kimi 和华为盘古，按官方原价一个个开会员，一个月小几百就没了。所以当我发现<strong>华为云把这一票旗舰模型塞进了同一个 AI Agent 入口</strong>（DevCloud 下的对话界面），而且按积分计费、积分还能靠签到和邀请白拿的时候，就知道这篇评测有的写了——这基本就是为"白嫖党"量身定做的姿势。</p>
+    <p>先说结论：<strong>一个入口、多家旗舰模型、低倍率 Flash 档日常够用，积分体系又能把成本打到 0</strong>。下面按模型阵容、积分玩法、邀请福利、上手步骤、客观槽点这个顺序展开。</p>
+
+    <h2>一、模型阵容：国产旗舰全家桶，倍率才是灵魂</h2>
+    <p>打开模型切换菜单，第一眼就是"国产大模型团建"：DeepSeek（深度求索）、GLM（智谱）、Kimi（月之暗面）、OpenPangu（华为自研盘古）全在一个列表里，可以随时切换。我截了张图，右边那列数字是各家模型的<strong>积分倍率</strong>：</p>
+    <figure>
+      <img src="../assets/huawei-models.png" alt="华为云 AI Agent 可切换模型列表截图，含积分倍率" loading="lazy">
+      <figcaption>模型切换菜单实测截图：十款模型，倍率从 0.08x 到 2.38x 不等</figcaption>
+    </figure>
+    <p>整理成表格看得更清楚：</p>
+    <table>
+      <thead><tr><th>模型</th><th>积分倍率</th><th>我的定位建议</th></tr></thead>
+      <tbody>
+        <tr><td>GLM-5.3-Flash</td><td><span class="score-pill">0.08x</span></td><td>全场最省，日常问答 / 写作主力（截图中我当前选中的就是它）</td></tr>
+        <tr><td>DeepSeek-V4.1-Flash</td><td><span class="score-pill">0.09x</span></td><td>同为地板价档，DeepSeek 口味，写稿改稿很顺</td></tr>
+        <tr><td>DeepSeek-V4.1-Flash-1017</td><td><span class="score-pill">0.12x</span></td><td>DeepSeek Flash 的 1017 更新版，日常档</td></tr>
+        <tr><td>OpenPangu-2.0-Flash</td><td><span class="score-pill">0.32x</span></td><td>华为自研盘古轻量版，平时外部平台很难白嫖到</td></tr>
+        <tr><td>GLM-5.2 / GLM-5.2-ArkTS-SPARK</td><td><span class="score-pill">0.7x</span></td><td>上一代满血 GLM，其中 ArkTS-SPARK 版对鸿蒙开发场景友好</td></tr>
+        <tr><td>OpenPangu-2.0-Pro</td><td><span class="score-pill">0.7x</span></td><td>盘古旗舰档，想体验华为自研满血模型选它</td></tr>
+        <tr><td>GLM-5.3</td><td><span class="score-pill">0.79x</span></td><td>GLM 满血版，复杂推理和代码任务比 Flash 稳</td></tr>
+        <tr><td>Kimi-K3.1-Pro</td><td><span class="score-pill">1.63x</span></td><td>Kimi Pro 档，长文本处理是强项</td></tr>
+        <tr><td>Kimi-K3</td><td><span class="score-pill">2.38x</span></td><td>全场最贵，重活 / 超长任务再上</td></tr>
+      </tbody>
+    </table>
+    <p class="dim">怎么理解倍率？可以把它当成"积分消耗系数"：同样的对话量，2.38x 的 Kimi-K3 花掉的积分约是 0.08x 的 GLM-5.3-Flash 的 <strong>30 倍</strong>。所以正确的薅法是<strong>日常把默认模型设成 Flash 档</strong>（0.08x～0.12x 这几款），遇到难啃的推理、长文档再临时切 Pro / 满血档——积分经得起花，体验也拉满。这也是我把标题里"爽蹬"两个字敢写出来的底气：不是所有平台都给你留了这么低的日常档位。</p>
+    <p>另外值得一说的是 <strong>OpenPangu 盘古系列</strong>。盘古是华为自研的大模型，平时想在外面体验并不容易，这里能直接以 0.32x / 0.7x 的倍率用到 Flash 和 Pro 两档，对想横向对比国产各家技术路线的人来说，这个入口的价值比省积分本身还大。</p>
+
+    <h2>二、积分体系：三个白拿积分的渠道</h2>
+    <p>倍率低只是省钱，积分白拿才是真白嫖。活动面板里有三个稳定来源，我把实测截图放在下面：</p>
+    <figure>
+      <img src="../assets/huawei-points.png" alt="华为云 AI Agent 积分活动面板截图：每日签到、邀请有礼、学生认证" loading="lazy">
+      <figcaption>积分活动面板实测截图（当天签到已领）</figcaption>
+    </figure>
+    <ul>
+      <li><strong>每日签到</strong>：每天固定 <span class="score-pill">+100 积分</span>，一个月雷打不动 3000；</li>
+      <li><strong>学生认证</strong>：完成一次认证直接 <span class="score-pill">+4000 积分</span>，学生党优先把这个领了；</li>
+      <li><strong>邀请返积分</strong>：这是重头戏，下一节单独算账。</li>
+    </ul>
+    <p>把第一章的倍率和这三条放在一起，一个"白嫖正循环"就出现了：<strong>签到攒积分 × 0.08x 低倍率 Flash 档 = 免费额度能用非常久</strong>。按我这几天的用量感受，日常问答和轻量写作的消耗，光靠每日签到就基本可以覆盖，属于把"按量付费"玩成了"长期免费"。</p>
+
+    <h2>三、重点：邀请与被邀请，两边都有得赚</h2>
+    <p>这节是给"推荐码上有礼"算笔账，<strong>邀请人和被邀请人各自的收益</strong>分开说清楚：</p>
+    <h3>邀请人（也就是我）能得到什么</h3>
+    <ul>
+      <li class="yes">✓ 每成功邀请 1 人注册，<strong>+1000 积分</strong>，多邀多得；</li>
+      <li class="yes">✓ 累计上限 <strong>50,000 积分</strong>（也就是 50 人封顶，顶格之后光邀请收益就够 Flash 档用很久）；</li>
+      <li class="yes">✓ 活动页可以一键复制邀请链接，"我的邀请记录"里能逐条核对邀请进度，不是黑箱。</li>
+    </ul>
+    <h3>被邀请人（也就是你）能得到什么</h3>
+    <ul>
+      <li class="yes">✓ 通过邀请链接直达 AI Agent 入口，注册 / 登录华为云账号即可开始用，省去自己找入口的功夫；</li>
+      <li class="yes">✓ 签到、学生认证、活动中心这些福利<strong>人人有份</strong>，不通过邀请链接来也一样能领；</li>
+      <li class="yes">✓ 新账号通常还有新人体验额度，以活动页实时展示为准；</li>
+      <li class="yes">✓ 注册之后<strong>你也会拥有自己的邀请链接</strong>，同样可以参加推荐活动——换句话说，这个玩法是可以"接力"的；</li>
+      <li class="yes">✓ 最关键的一条：你的使用权益和自主注册<strong>完全一致</strong>，我的 1000 积分是平台出的奖励，不会从你的额度里扣。</li>
+    </ul>
+    <p class="dim">一句话总结这场分账：平台花积分换增长，邀请人拿积分，被邀请人零成本拿到和自主注册一样的权益，三方都不吃亏——这种结构里没有"杀熟"，可以放心点。</p>
+
+    <h2>四、上手三步走</h2>
+    <ol>
+      <li><strong>打开入口</strong>：用下面的邀请链接进入华为云 AI Agent（DevCloud 对话界面）；</li>
+      <li><strong>注册 / 登录</strong>：华为云账号直接登，没有就现场注册一个；</li>
+      <li><strong>选模型开聊</strong>：默认模型建议先设 GLM-5.3-Flash（0.08x），写代码、整理资料、改网页这类 Agent 任务直接派，遇到硬骨头再切 GLM-5.3 满血或 Kimi-K3。</li>
+    </ol>
+    <p>想第一时间领满福利的话，登录后先去活动面板把<strong>每日签到</strong>点了、符合条件的把<strong>学生认证</strong>做了，然后从"推荐码上有礼"里复制你自己的邀请链接开始攒积分。</p>
+
+    <h2>五、客观槽点（照实说）</h2>
+    <ul>
+      <li class="no">✗ 高倍率档积分烧得飞快：Kimi-K3 是 2.38x，免费积分玩这个档位撑不了太久，重活建议按需切换、用完切回 Flash；</li>
+      <li class="no">✗ 免费积分总量有天花板，重度用户要么坚持签到 + 邀请攒分，要么就得充值，指望"无限白嫖满血模型"不现实；</li>
+      <li class="no">✗ 活动规则有时效性，签到分值、邀请上限、认证奖励都可能调整，<strong>以活动页面实时展示为准</strong>；</li>
+      <li class="no">✗ 部分模型属于第三方托管接入，个别能力（比如超长上下文的原厂专属特性）可能和官方入口存在差异，追求原汁原味可以再去各家的原生客户端对比。</li>
+    </ul>
+
+    <div class="concl">
+      <h3>六、总结</h3>
+      <p style="margin-top:10px">华为云这个 AI Agent 入口，本质上是用<strong>积分制 + 聚合模型</strong>解决了一个很实际的痛点：想用上各家旗舰模型，又不想为每家都开订阅。十款模型同台、倍率透明可查，Flash 档低到 0.08x，配合每日签到、学生认证和邀请返分，普通用户完全能做到零成本长期使用；华为自研的盘古系列能直接上手体验，也算额外的加分项。对想低成本把 AI Agent 塞进日常的人，我的结论是：<strong>值得上车，先用 Flash 档，把积分薅明白再说</strong>。</p>
+      <div class="cta">
+        <b>感兴趣的朋友可以走我的邀请链接上车：</b><br>
+        <a class="btn" href="https://devcloud.cn-north-4.huaweicloud.com/chat?source=dmzntgwlb&amp;sourcead=dmzntgwlb1&amp;invitecode=INV-16EHdIwwJXgN3I_TV6xcPfqy2flKYz_iXANFsj0F9F41f_8x9SGYVRA9O-JZQ91GZPZx8asIyAKTUdJ_I7XbncnZVeY3c4Qjr1MF0DPN-NuIzTBPTRMpsTCjSZscjiBW5eGS1QOZu9A-HYO_2bpJplwIGYkAPZQubGds_qnwT0ra040_" target="_blank" rel="noopener">进入华为云 AI Agent →</a>
+        <p class="dim" style="margin-top:12px">完整链接（复制用，注意是一整行）：</p>
+        <pre style="text-align:left"><code>https://devcloud.cn-north-4.huaweicloud.com/chat?source=dmzntgwlb&amp;sourcead=dmzntgwlb1&amp;invitecode=INV-16EHdIwwJXgN3I_TV6xcPfqy2flKYz_iXANFsj0F9F41f_8x9SGYVRA9O-JZQ91GZPZx8asIyAKTUdJ_I7XbncnZVeY3c4Qjr1MF0DPN-NuIzTBPTRMpsTCjSZscjiBW5eGS1QOZu9A-HYO_2bpJplwIGYkAPZQubGds_qnwT0ra040_</code></pre>
+      </div>
+      <p class="dim" style="margin-top:14px">声明：本文为本人真实使用体验，模型列表与积分活动均以页面实测截图为准，未收取任何费用；文内链接为本人邀请链接，通过它注册你的权益不受影响，我会获得平台积分奖励，特此说明。活动内容如与官方页面不一致，以官方为准。</p>
+    </div>
+
+    <a class="back-home" href="/index.html">← 返回首页 · 更多服务器评测</a>
+  </article>
+</div>
+
+<footer>
+  <div class="wrap"><p>© 2026 张盈评测 · ZY Review · 托管于 Render</p></div>
+</footer>
+
+<script>
+const btn=document.getElementById('themeBtn');
+const saved=localStorage.getItem('cr-theme');
+if(saved){document.documentElement.dataset.theme=saved}
+btn.textContent=document.documentElement.dataset.theme==='dark'?'☀️':'🌙';
+btn.onclick=()=>{
+  const cur=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=cur;localStorage.setItem('cr-theme',cur);
+  btn.textContent=cur==='dark'?'☀️':'🌙';
+};
+</script>
+</body>
+</html>
